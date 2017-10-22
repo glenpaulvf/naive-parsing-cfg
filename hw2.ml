@@ -10,3 +10,7 @@ let rec produce_al g nts =
 
 let convert_grammar gram1 = 
 	(fst gram1, fun nts -> produce_al (snd gram1) nts)
+
+type ('nonterminal, 'terminal) symbol =
+	| N of 'nonterminal
+	| T of 'terminal
