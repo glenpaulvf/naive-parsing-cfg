@@ -1,0 +1,58 @@
+(* Homework 2. Naive parsing of context free grammars *)
+
+Summarize algorithm.
+Explain tried and rejected implementations.
+Weaknesses in solution.
+
+I.	convert_grammar
+
+I implemented the convert_grammar function using a helper function called
+produce_al, which stands for "produce alternative list". The function
+produce_al is a recursive function that iterates through the grammar rules
+as creates a list of every rule that matches the given nonterminal symbol.
+
+II.	parse_prefix
+
+I implemented the parse_prefix function using a helper function called
+matcher. The matcher function is actually implemented with mutually
+recursive functions: evaluate_al and evaluate_rhs.
+
+ A.	matcher:
+The matcher will produces the alternative list for a given symbol of a
+grammar. If there is no such list, then return None; otherwise, evaluate
+the alternative list and return the first acceptable match of a prefix of
+the fragment. The acceptor will return the first acceptable match or return
+None, if there is no such match.
+
+ B.	evaluate_al:
+Given an empty alternative list, return None. Given a non-empty alternative
+list, evaluate the first right hand side and concatenate the derivation
+with a tuple containing the symbol and the right hand side being evaluated.
+If the evaluation of the right hand side results in Some x, where x is some
+value, then return Some x; otherwise, evaluate the next right hand side.
+
+ C.	evaluate_rhs:
+Given an empty right hand side, pass the current derivation and fragment to
+the acceptor. Given a non-empty right hand side, evaluate the symbol. If
+the symbol is a nonterminal, then match the nonterminal with an acceptor
+that evaluates the right hand side. Otherwise, if the symbol if a terminal
+and the fragment isn't empty, then return None. However, if the symbol is a
+terminal and the fragment isn't empty, then evaluate the terminal. If the
+terminal is equal to the prefix of the fragment, then evaluate the
+remaining right hand sides and the suffix of the fragment. Otherwise,
+return None.
+
+I initially tried to implement these functions (and others) without being
+mutually recursive. However, it became a very difficult tasks, as I needed
+these functions to call each other. So, this was the best implementation
+for the matcher function and the parse_prefix function.
+
+Of course, this implementation is still flawed:
+	1. Left-recursive
+	2. Unable to handle self-referential grammars
+	3. Unable to handle not well-formed grammars
+	4. Unable to handle grammars with blind-alley rules
+	5. Unable to address ambiguous cases (shown in hw2test.ml)
+	6. Slow performance for large grammars
+	7. Unable to show optimal derivations for every case
+	etc.
