@@ -5,7 +5,7 @@ let rec produce_al g nts =
 	| [] -> []
 	| (nt, rhs)::tl ->
 		if nt = nts then
-			rhs@produce_al tl nts
+			rhs::produce_al tl nts
 		else produce_al tl nts
 
 let convert_grammar gram1 = 
